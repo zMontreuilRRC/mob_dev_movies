@@ -63,7 +63,7 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
 
         NavHost(navController = navController, startDestination = Destination.Movie.route) {
             composable(Destination.Movie.route) {
-                MovieScreen(movieViewModel)
+                MovieScreen(movieViewModel.movieUiState)
             }
 
             composable(Destination.Watch.route) {

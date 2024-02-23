@@ -19,25 +19,34 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class MovieUiState (
-    val movies: List<Movie> = mutableListOf()
-)
+sealed interface MovieUiState {
+    data class Success(val movies: List<Movie>): MovieUiState
+    object Error: MovieUiState
+    object Loading: MovieUiState
+}
+
 
 class MovieViewModel: ViewModel() {
     // private variable
-    private val _movieUiState = MutableStateFlow(MovieUiState())
-    
-    val uiState: StateFlow<MovieUiState> = _movieUiState.asStateFlow()
+    var movieUiState: MovieUiState by mutableStateOf(MovieUiState.Loading)
+        private set
 
     init{
         getTrendingMovies()
     }
     private fun getTrendingMovies() {
         viewModelScope.launch {
+            movieUiState = MovieUiState.Loading
+
             val listResult = MovieApi.retrofitService.getMovies()
-            _movieUiState.update {
-                currentState ->
-                currentState.copy(movies = listResult.results)
+
+            movieUiState = try {
+                val movies = MovieApi.retrofitService.getMovies()
+                MovieUiState.Success(
+                    movies = movies.results
+                )
+            } catch (e: Exception) {
+                MovieUiState.Error
             }
         }
     }

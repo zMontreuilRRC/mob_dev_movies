@@ -18,7 +18,6 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface MovieApiService {
-
     @GET("${TRENDING_MOVIES_ENDPOINT}")
     suspend fun getMovies(
         @Query("api_key") key: String = KEY_HEADER
