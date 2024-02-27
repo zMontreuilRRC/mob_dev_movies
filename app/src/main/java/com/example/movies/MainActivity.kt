@@ -59,7 +59,7 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
         }
     ) {
         paddingValues ->
-        val movieViewModel: MovieViewModel = viewModel()
+        val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
 
         NavHost(navController = navController, startDestination = Destination.Movie.route) {
             composable(Destination.Movie.route) {
