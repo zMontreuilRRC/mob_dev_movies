@@ -1,6 +1,8 @@
 package com.example.movies.ui.theme
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,8 +15,12 @@ fun MovieScreen(movieViewModel: MovieViewModel,
     val moviesUiState = movieViewModel.uiState.collectAsState()
 
     Column () {
-        moviesUiState.value.movies.forEach() { m ->
-            Text(m.title)
+
+        LazyColumn{
+            items(moviesUiState.value.movies) {
+                movie ->
+                MovieCard(movieItem = movie)
+            }
         }
     }
 
