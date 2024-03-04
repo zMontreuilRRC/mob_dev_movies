@@ -6,6 +6,7 @@ import com.example.movies.network.MovieApiService
 
 interface MovieRepository {
     suspend fun getMovieData(): MovieData
+    suspend fun searchMovie(searchTitle: String): MovieData
 }
 
 class NetworkMovieRepository(
@@ -14,6 +15,10 @@ class NetworkMovieRepository(
 ): MovieRepository {
     override suspend fun getMovieData(): MovieData {
         return movieApiService.getMovies()
+    }
+
+    override suspend fun searchMovie(searchTitle: String): MovieData {
+        return movieApiService.searchMovies(searchTitle = searchTitle)
     }
 }
 
@@ -24,16 +29,27 @@ class FakeMovieRepository(): MovieRepository {
         return _fakeData
     }
 
+    override suspend fun searchMovie(searchTitle: String): MovieData {
+        var newData = _fakeData.copy()
+
+        newData.results = newData.results.filter { it.title.contains(
+            searchTitle,
+            ignoreCase = true)
+        }
+
+        return newData
+    }
+
 }
 
 class FakeRepoData() {
-    val movie1 = Movie(
+    var movie1 = Movie(
         adult = false,
         backdropPath = "/backdrop1.jpg",
         id = 1,
-        title = "Movie 1",
+        title = "Aces High",
         originalLanguage = "en",
-        originalTitle = "Original Movie 1",
+        originalTitle = "Aces High",
         overview = "Overview of Movie 1",
         posterPath = "/poster1.jpg",
         mediaType = "movie",
@@ -45,13 +61,13 @@ class FakeRepoData() {
         voteCount = 1000
     )
 
-    val movie2 = Movie(
+    var movie2 = Movie(
         adult = false,
         backdropPath = "/backdrop2.jpg",
         id = 2,
-        title = "Movie 2",
+        title = "Jokers Wild",
         originalLanguage = "en",
-        originalTitle = "Original Movie 2",
+        originalTitle = "Jokers Wild",
         overview = "Overview of Movie 2",
         posterPath = "/poster2.jpg",
         mediaType = "movie",
@@ -63,13 +79,13 @@ class FakeRepoData() {
         voteCount = 1500
     )
 
-    val movie3 = Movie(
+    var movie3 = Movie(
         adult = false,
         backdropPath = "/backdrop3.jpg",
         id = 3,
-        title = "Movie 3",
+        title = "Read 'em and Weep",
         originalLanguage = "en",
-        originalTitle = "Original Movie 3",
+        originalTitle = "Read 'em and Weep",
         overview = "Overview of Movie 3",
         posterPath = "/poster3.jpg",
         mediaType = "movie",
@@ -81,13 +97,13 @@ class FakeRepoData() {
         voteCount = 800
     )
 
-    val movie4 = Movie(
+    var movie4 = Movie(
         adult = true,
         backdropPath = "/backdrop4.jpg",
         id = 4,
-        title = "Movie 4",
+        title = "Royal Flush",
         originalLanguage = "en",
-        originalTitle = "Original Movie 4",
+        originalTitle = "Royal Flush",
         overview = "Overview of Movie 4",
         posterPath = "/poster4.jpg",
         mediaType = "movie",
@@ -99,13 +115,13 @@ class FakeRepoData() {
         voteCount = 1200
     )
 
-    val movie5 = Movie(
+    var movie5 = Movie(
         adult = false,
         backdropPath = "/backdrop5.jpg",
         id = 5,
-        title = "Movie 5",
+        title = "A Few Cards Short",
         originalLanguage = "en",
-        originalTitle = "Original Movie 5",
+        originalTitle = "A Few Cards Short",
         overview = "Overview of Movie 5",
         posterPath = "/poster5.jpg",
         mediaType = "movie",
@@ -117,9 +133,9 @@ class FakeRepoData() {
         voteCount = 900
     )
 
-    val fakeMovieData = MovieData(
+    var fakeMovieData = MovieData(
         page = 1,
-        results = listOf(movie1, movie2, movie3, movie4, movie5),
+        results = mutableListOf(movie1, movie2, movie3, movie4, movie5),
         totalPages = 1000,
         totalResults = 1000
     )

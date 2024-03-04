@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
@@ -13,6 +15,8 @@ import com.example.movies.model.Movie
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class SearchUiState (
     val movies: List<Movie> = mutableListOf()
@@ -33,7 +37,16 @@ class SearchViewModel(
     }
 
     fun searchForMovies() {
+        var titleSearch = searchValue
+        viewModelScope.launch {
+            val dataResult = movieRepository.searchMovie(titleSearch)
+            _searchUiState.update {
+                currentState ->
+                currentState.copy(movies = dataResult.results)
+            }
+        }
 
+        searchValue = ""
     }
 
 

@@ -23,6 +23,6 @@ class DefaultAppContainer: AppContainer {
     }
 
     override val movieRepository: MovieRepository by lazy {
-        FakeMovieRepository()
+        NetworkMovieRepository(retrofitService)
     }
 }

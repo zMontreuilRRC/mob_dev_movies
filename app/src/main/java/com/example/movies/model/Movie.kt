@@ -23,7 +23,7 @@ data class Movie (
     val posterPath: String,
 
     @SerialName(value="media_type")
-    val mediaType: String,
+    val mediaType: String? = "",
 
     @SerialName(value="genre_ids")
     val genreIds: List<Int>,
