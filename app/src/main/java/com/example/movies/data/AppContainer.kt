@@ -13,9 +13,14 @@ interface AppContainer {
 class DefaultAppContainer: AppContainer {
     private val baseUrl = "https://api.themoviedb.org/3/"
 
+    private val configuredJson = Json {
+        isLenient = true
+        coerceInputValues = true
+    }
+
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(configuredJson.asConverterFactory("application/json".toMediaType()))
         .build()
 
     private val retrofitService: MovieApiService by lazy {

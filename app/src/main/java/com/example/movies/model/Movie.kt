@@ -8,7 +8,7 @@ data class Movie (
     val adult: Boolean,
 
     @SerialName(value="backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String? = "",
     val id: Int,
     val title: String,
 
@@ -20,14 +20,14 @@ data class Movie (
     val overview: String,
 
     @SerialName(value="poster_path")
-    val posterPath: String,
+    val posterPath: String? = "",
 
     @SerialName(value="media_type")
     val mediaType: String? = "",
 
     @SerialName(value="genre_ids")
     val genreIds: List<Int>,
-    val popularity: Double,
+    val popularity: Double? = 0.0,
 
     @SerialName(value="release_date")
     val releaseDate: String,
