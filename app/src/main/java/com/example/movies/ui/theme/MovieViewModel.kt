@@ -34,12 +34,13 @@ class MovieViewModel(
 ): ViewModel() {
     // private variable
     private val _movieUiState = MutableStateFlow(MovieUiState())
-    
     val uiState: StateFlow<MovieUiState> = _movieUiState.asStateFlow()
 
     init{
         getTrendingMovies()
     }
+
+
     private fun getTrendingMovies() {
         viewModelScope.launch {
             val listResult = movieRepository.getMovieData()

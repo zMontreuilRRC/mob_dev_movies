@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import com.example.movies.model.Movie
 
 @Composable
-fun MovieScreen(movieViewModel: MovieViewModel,
-                modifier: Modifier = Modifier) {
+fun MovieScreen(
+    modifier: Modifier = Modifier,
+    movieViewModel: MovieViewModel
+) {
     val moviesUiState = movieViewModel.uiState.collectAsState()
 
     Column () {

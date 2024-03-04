@@ -36,6 +36,23 @@ fun BottomNav(navController: NavController, modifier: Modifier = Modifier) {
             label = { Text(text = Destination.Movie.route.replaceFirstChar {it.uppercase()})}
         )
 
+        BottomNavigationItem(
+            selected = currentDestination?.route == Destination.Search.route,
+            onClick = {
+                navController.navigate(Destination.Search.route) {
+                    popUpTo(Destination.Search.route)
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.search),
+                    contentDescription = "Search Screen",
+                    modifier = Modifier.size(26.dp)
+                )
+            },
+            label = { Text(text = Destination.Movie.route.replaceFirstChar {it.uppercase()})}
+        )
+
 
         BottomNavigationItem(
             selected = currentDestination?.route == Destination.Watch.route,

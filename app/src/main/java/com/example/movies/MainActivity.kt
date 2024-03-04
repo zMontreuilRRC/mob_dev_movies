@@ -22,11 +22,14 @@ import com.example.movies.ui.theme.BottomNav
 import com.example.movies.ui.theme.MovieScreen
 import com.example.movies.ui.theme.MovieViewModel
 import com.example.movies.ui.theme.MoviesTheme
+import com.example.movies.ui.theme.SearchScreen
+import com.example.movies.ui.theme.SearchViewModel
 import com.example.movies.ui.theme.WatchScreen
 
 sealed class Destination (val route: String) {
     object Movie: Destination("movies")
     object Watch: Destination("watch")
+    object Search: Destination("search")
 }
 
 class MainActivity : ComponentActivity() {
@@ -59,11 +62,20 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
         }
     ) {
         paddingValues ->
+
+        // store search values in viewmodel to keep values across navigations
+
         val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
+        val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
+
 
         NavHost(navController = navController, startDestination = Destination.Movie.route) {
             composable(Destination.Movie.route) {
-                MovieScreen(movieViewModel)
+                MovieScreen(movieViewModel = movieViewModel)
+            }
+
+            composable(Destination.Search.route) {
+                SearchScreen(searchViewModel = searchViewModel)
             }
 
             composable(Destination.Watch.route) {
