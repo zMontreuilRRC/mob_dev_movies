@@ -1,6 +1,7 @@
 package com.example.movies.model
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,8 +31,10 @@ data class Movie (
     @SerialName(value="media_type")
     var mediaType: String? = "",
 
-    @SerialName(value="genre_ids")
-    var genreIds: List<Int>,
+    // cannot store collections in SQL
+//    @Ignore
+//    @SerialName(value="genre_ids")
+//    var genreIds: List<Int>,
     var popularity: Double? = 0.0,
 
     @SerialName(value="release_date")

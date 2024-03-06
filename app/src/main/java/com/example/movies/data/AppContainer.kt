@@ -19,6 +19,7 @@ class DefaultAppContainer (private val context: Context): AppContainer {
     private val configuredJson = Json {
         isLenient = true
         coerceInputValues = true
+        ignoreUnknownKeys = true
     }
 
     private val retrofit: Retrofit = Retrofit.Builder()

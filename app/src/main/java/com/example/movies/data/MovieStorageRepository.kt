@@ -9,11 +9,16 @@ interface MovieStorageRepository {
     suspend fun insertMovie(movie: Movie)
     suspend fun deleteMovie(movie: Movie)
     suspend fun updateMovie(movie: Movie)
+    suspend fun clearAllMovies()
 }
 
 class OfflineMovieStorageRepository(private val movieDao: MovieDao): MovieStorageRepository {
     override fun getAllMoviesStream(): Flow<List<Movie>> {
         return movieDao.getAllMovies()
+    }
+
+    override suspend fun clearAllMovies() {
+        movieDao.clearAllMovies()
     }
 
     override suspend fun insertMovie(movie: Movie) {
