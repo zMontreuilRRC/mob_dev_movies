@@ -5,12 +5,15 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import android.content.Context
 
 interface AppContainer {
-    val movieRepository: MovieRepository
+    val movieApiRepository: MovieApiRepository
+    val movieStorageRepository: MovieStorageRepository
 }
 
-class DefaultAppContainer: AppContainer {
+class DefaultAppContainer (private val context: Context): AppContainer {
+    // add retrofit db
     private val baseUrl = "https://api.themoviedb.org/3/"
 
     private val configuredJson = Json {
@@ -27,7 +30,12 @@ class DefaultAppContainer: AppContainer {
         retrofit.create(MovieApiService:: class.java)
     }
 
-    override val movieRepository: MovieRepository by lazy {
-        NetworkMovieRepository(retrofitService)
+    override val movieApiRepository: MovieApiRepository by lazy {
+        NetworkMovieApiRepository(retrofitService)
+    }
+
+    // add room db
+    override val movieStorageRepository: MovieStorageRepository by lazy {
+        OfflineMovieStorageRepository(MovieDatabase.getDatabase(context).movieDao())
     }
 }

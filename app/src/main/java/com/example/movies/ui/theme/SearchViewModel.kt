@@ -6,11 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
-import com.example.movies.data.MovieRepository
+import com.example.movies.data.MovieApiRepository
 import com.example.movies.model.Movie
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +22,7 @@ data class SearchUiState (
 )
 
 class SearchViewModel(
-    private val movieRepository: MovieRepository
+    private val movieApiRepository: MovieApiRepository
 ): ViewModel() {
 
     private val _searchUiState = MutableStateFlow(SearchUiState())
@@ -39,7 +38,7 @@ class SearchViewModel(
     fun searchForMovies() {
         var titleSearch = searchValue
         viewModelScope.launch {
-            val dataResult = movieRepository.searchMovie(titleSearch)
+            val dataResult = movieApiRepository.searchMovie(titleSearch)
             _searchUiState.update {
                 currentState ->
                 currentState.copy(movies = dataResult.results)
@@ -55,8 +54,8 @@ class SearchViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MovieApplication)
-                val movieRepository = application.container.movieRepository
-                SearchViewModel(movieRepository = movieRepository)
+                val movieRepository = application.container.movieApiRepository
+                SearchViewModel(movieApiRepository = movieRepository)
             }
         }
     }

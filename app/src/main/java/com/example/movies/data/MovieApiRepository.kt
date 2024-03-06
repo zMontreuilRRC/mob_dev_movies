@@ -4,15 +4,15 @@ import com.example.movies.model.Movie
 import com.example.movies.model.MovieData
 import com.example.movies.network.MovieApiService
 
-interface MovieRepository {
+interface MovieApiRepository {
     suspend fun getMovieData(): MovieData
     suspend fun searchMovie(searchTitle: String): MovieData
 }
 
-class NetworkMovieRepository(
+class NetworkMovieApiRepository(
     // pass in any type of API service (such as retrofit or fake)
     private val movieApiService: MovieApiService
-): MovieRepository {
+): MovieApiRepository {
     override suspend fun getMovieData(): MovieData {
         return movieApiService.getMovies()
     }
@@ -22,7 +22,7 @@ class NetworkMovieRepository(
     }
 }
 
-class FakeMovieRepository(): MovieRepository {
+class FakeMovieApiRepository(): MovieApiRepository {
 
     private val _fakeData = FakeRepoData().fakeMovieData
     override suspend fun getMovieData(): MovieData {

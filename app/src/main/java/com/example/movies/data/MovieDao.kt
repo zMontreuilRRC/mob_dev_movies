@@ -29,6 +29,6 @@ interface MovieDao {
     Room does not have a convenience method for this so we add it as a manual query
      */
     @Query("SELECT * FROM movies ORDER BY title DESC")
-    fun getAllItems(): Flow<Movie>
+    fun getAllMovies(): Flow<List<Movie>>
 
 }
