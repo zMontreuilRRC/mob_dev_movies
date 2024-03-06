@@ -1,5 +1,6 @@
 package com.example.movies.ui.theme
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -11,11 +12,14 @@ import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.data.OfflineMovieStorageRepository
 import com.example.movies.model.Movie
+import com.example.movies.model.MovieData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 data class MovieUiState (
     val movies: List<Movie> = mutableListOf()
@@ -48,16 +52,24 @@ class MovieViewModel(
 
     private fun getTrendingMovies() {
         viewModelScope.launch {
-            val listResult = movieApiRepository.getMovieData()
-            _movieUiState.update {
-                currentState ->
-                currentState.copy(movies = listResult.results)
-            }
 
-            /*TODO (Introduce domain layer to allow repository interaction)*/
-            // ensure that movies are up-to-date with most recent query
-            clearMovies()
-            saveMovies()
+            try {
+                var listResult: List<Movie> = movieApiRepository.getMovies()
+
+                _movieUiState.update {
+                        currentState ->
+                    currentState.copy(movies = listResult)
+                }
+                clearMovies()
+                saveMovies()
+            } catch (e: Exception) {
+                Log.w("OFFLINE", "Service offline")
+                var listResult = movieStorageRepository.getAllMovies()
+                _movieUiState.update {
+                        currentState ->
+                    currentState.copy(movies = listResult)
+              }
+            }
         }
     }
 

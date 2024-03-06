@@ -5,7 +5,7 @@ import com.example.movies.model.MovieData
 import com.example.movies.network.MovieApiService
 
 interface MovieApiRepository {
-    suspend fun getMovieData(): MovieData
+    suspend fun getMovies(): List<Movie>
     suspend fun searchMovie(searchTitle: String): MovieData
 }
 
@@ -13,8 +13,8 @@ class NetworkMovieApiRepository(
     // pass in any type of API service (such as retrofit or fake)
     private val movieApiService: MovieApiService
 ): MovieApiRepository {
-    override suspend fun getMovieData(): MovieData {
-        return movieApiService.getMovies()
+    override suspend fun getMovies(): List<Movie> {
+        return movieApiService.getMovies().results
     }
 
     override suspend fun searchMovie(searchTitle: String): MovieData {
@@ -25,8 +25,8 @@ class NetworkMovieApiRepository(
 class FakeMovieApiRepository(): MovieApiRepository {
 
     private val _fakeData = FakeRepoData().fakeMovieData
-    override suspend fun getMovieData(): MovieData {
-        return _fakeData
+    override suspend fun getMovies(): List<Movie> {
+        return _fakeData.results
     }
 
     override suspend fun searchMovie(searchTitle: String): MovieData {

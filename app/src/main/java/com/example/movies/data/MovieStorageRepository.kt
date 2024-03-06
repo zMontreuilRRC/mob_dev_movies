@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieStorageRepository {
     // flow obviates suspend
-    fun getAllMoviesStream(): Flow<List<Movie>>
+    suspend fun getAllMovies(): List<Movie>
     suspend fun insertMovie(movie: Movie)
     suspend fun deleteMovie(movie: Movie)
     suspend fun updateMovie(movie: Movie)
@@ -13,7 +13,7 @@ interface MovieStorageRepository {
 }
 
 class OfflineMovieStorageRepository(private val movieDao: MovieDao): MovieStorageRepository {
-    override fun getAllMoviesStream(): Flow<List<Movie>> {
+    override suspend fun getAllMovies(): List<Movie> {
         return movieDao.getAllMovies()
     }
 

@@ -29,7 +29,7 @@ interface MovieDao {
     Room does not have a convenience method for this so we add it as a manual query
      */
     @Query("SELECT * FROM movies ORDER BY title DESC")
-    fun getAllMovies(): Flow<List<Movie>>
+    suspend fun getAllMovies(): List<Movie>
 
     @Query("DELETE FROM movies")
     suspend fun clearAllMovies()
