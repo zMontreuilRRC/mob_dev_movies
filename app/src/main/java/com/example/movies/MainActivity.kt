@@ -21,12 +21,15 @@ import com.example.movies.screens.movies.MovieViewModel
 import com.example.movies.ui.theme.MoviesTheme
 import com.example.movies.screens.search.SearchScreen
 import com.example.movies.screens.search.SearchViewModel
+import com.example.movies.screens.signin.SignInScreen
+import com.example.movies.screens.signin.SignInViewModel
 import com.example.movies.screens.watch.WatchScreen
 
 sealed class Destination (val route: String) {
     object Movie: Destination("movies")
     object Watch: Destination("watch")
     object Search: Destination("search")
+    object SignIn: Destination("signin")
 }
 
 class MainActivity : ComponentActivity() {
@@ -64,9 +67,15 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
 
         val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
         val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
+        val signinViewModel: SignInViewModel = viewModel(factory = SignInViewModel.Factory)
 
+        signinViewModel.navigateOnSignIn = {navController.navigate(Destination.Movie.route)}
 
-        NavHost(navController = navController, startDestination = Destination.Movie.route) {
+        NavHost(navController = navController, startDestination = Destination.SignIn.route) {
+            composable(Destination.SignIn.route) {
+                SignInScreen(signInViewModel = signinViewModel)
+            }
+            
             composable(Destination.Movie.route) {
                 MovieScreen(movieViewModel = movieViewModel)
             }

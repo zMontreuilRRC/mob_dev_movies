@@ -36,7 +36,7 @@ class SearchViewModel(
     }
 
     fun searchForMovies() {
-        var titleSearch = searchValue
+        val titleSearch = searchValue
         viewModelScope.launch {
             val dataResult = movieApiRepository.searchMovie(titleSearch)
             _searchUiState.update {
