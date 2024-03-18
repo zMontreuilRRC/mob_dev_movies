@@ -1,4 +1,4 @@
-package com.example.movies.ui.theme
+package com.example.movies.screens.watch
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

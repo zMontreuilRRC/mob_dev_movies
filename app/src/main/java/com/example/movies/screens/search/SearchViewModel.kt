@@ -1,4 +1,4 @@
-package com.example.movies.ui.theme
+package com.example.movies.screens.search
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

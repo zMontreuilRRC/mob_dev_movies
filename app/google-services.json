@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371779663996",
+    "project_id": "movies-145d3",
+    "storage_bucket": "movies-145d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371779663996:android:0b0a264eb9f6cb9fc1f1f9",
+        "android_client_info": {
+          "package_name": "com.example.movies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKdziOqUFyvQSZQDBirRA6102wkBL6mnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.movies.ui.theme
+package com.example.movies.screens.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.movies.ui.theme.MovieCard
 
 @Composable
 fun SearchScreen(

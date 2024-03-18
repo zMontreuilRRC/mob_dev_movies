@@ -1,4 +1,4 @@
-package com.example.movies.ui.theme
+package com.example.movies.screens.movies
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,16 +10,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieStorageRepository
-import com.example.movies.data.OfflineMovieStorageRepository
 import com.example.movies.model.Movie
-import com.example.movies.model.MovieData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 data class MovieUiState (
     val movies: List<Movie> = mutableListOf()
