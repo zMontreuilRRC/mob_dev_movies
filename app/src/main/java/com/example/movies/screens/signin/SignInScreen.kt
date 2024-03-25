@@ -1,5 +1,6 @@
 package com.example.movies.screens.signin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,5 +73,12 @@ fun SignInScreen(
                 fontSize = 30.sp
             )
         }
+
+        Text(
+            uiState.errorMessage ?: "",
+            fontWeight = FontWeight.Bold,
+            color = Color.Red,
+            modifier = Modifier.background(color = Color.Gray)
+            )
     }
 }

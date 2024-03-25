@@ -1,5 +1,7 @@
 package com.example.movies.screens.signin
 
+import android.util.Log
+import android.util.Patterns
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +13,14 @@ import com.example.movies.screens.search.SearchViewModel
 
 data class SignInUiState(
     val email: String = "",
-    val password: String = ""
+    val password: String = "",
+    val errorMessage: String? = null
 )
+
 class SignInViewModel(
     private val authRepository: AuthRepository
 ): ViewModel() {
+    //region STATE
     var uiState = mutableStateOf(SignInUiState())
         private set
 
@@ -26,16 +31,49 @@ class SignInViewModel(
     }
 
     fun updateEmailState(newValue: String) {
-        uiState.value = uiState.value.copy(email = newValue)
+        uiState.value = uiState.value.copy(email = newValue.trim())
+    }
+    //endregion
+
+    //region METHODS
+    private fun validEmailAndPassword(): Boolean {
+        if(uiState.value.email.isBlank()){
+            uiState.value = uiState.value.copy(
+                errorMessage = "Please enter a valid email."
+            )
+            return false;
+        }
+        else if(uiState.value.password.length < 6) {
+            uiState.value = uiState.value.copy(
+                errorMessage = "Please enter a password at least 6 characters in length."
+            )
+            return false
+        } else {
+            return true
+        }
     }
 
     fun registerUser() {
-        authRepository.createAccount(
-            uiState.value.email,
-            uiState.value.password) {
-            navigateOnSignIn()
+        try {
+            if(validEmailAndPassword()) {
+                authRepository.createAccount(
+                    uiState.value.email,
+                    uiState.value.password.trim()
+                ) {
+                    Log.d("REGISTRATION", it?.localizedMessage ?: "No Message")
+                    navigateOnSignIn()
+                }
+            }
+        } catch(e: Exception) {
+            uiState.value = uiState.value.copy(
+                errorMessage =  e.message ?: "Something went wrong registering your account.")
         }
     }
+
+    //endregion
+
+
+    //region COMPANION
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -45,4 +83,5 @@ class SignInViewModel(
             }
         }
     }
+    //
 }
