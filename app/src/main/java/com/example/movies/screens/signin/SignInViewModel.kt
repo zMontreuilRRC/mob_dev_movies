@@ -60,8 +60,15 @@ class SignInViewModel(
                     uiState.value.email,
                     uiState.value.password.trim()
                 ) {
-                    Log.d("REGISTRATION", it?.localizedMessage ?: "No Message")
-                    navigateOnSignIn()
+                    throwable ->
+                    if(throwable != null) {
+                        uiState.value = uiState.value.copy(
+                            errorMessage =  throwable.message
+                                ?: "Something went wrong registering your account."
+                        )
+                    } else {
+                        navigateOnSignIn()
+                    }
                 }
             }
         } catch(e: Exception) {
