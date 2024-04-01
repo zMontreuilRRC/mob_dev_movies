@@ -2,6 +2,7 @@ package com.example.movies.network
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 
 class FirebaseAuthService {
@@ -26,7 +27,15 @@ class FirebaseAuthService {
                     onResult(null)
                 } else {
                     onResult(Exception(task.exception?.message))
-                }
             }
+        }
+    }
+
+    fun logout() {
+        Firebase.auth.signOut()
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return Firebase.auth.currentUser
     }
 }

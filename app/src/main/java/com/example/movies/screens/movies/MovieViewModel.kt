@@ -8,14 +8,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
+import com.example.movies.data.AuthRepository
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.model.Movie
+import com.example.movies.model.MovieUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.logging.Logger
 
 data class MovieUiState (
     val movies: List<Movie> = mutableListOf()
@@ -23,7 +26,8 @@ data class MovieUiState (
 
 class MovieViewModel(
     private val movieApiRepository: MovieApiRepository,
-    private val movieStorageRepository: MovieStorageRepository
+    private val movieStorageRepository: MovieStorageRepository,
+    private val authRepository: AuthRepository
 ): ViewModel() {
     // private variable
     private val _movieUiState = MutableStateFlow(MovieUiState())
@@ -31,6 +35,11 @@ class MovieViewModel(
 
     init{
         getTrendingMovies()
+    }
+
+    fun getUser() {
+        val user: MovieUser = authRepository.getCurrentUser()
+        Log.d("CURRENT USER", user.toString())
     }
 
     private suspend fun clearMovies() {
@@ -46,9 +55,9 @@ class MovieViewModel(
         }
     }
 
+
     private fun getTrendingMovies() {
         viewModelScope.launch {
-
             try {
                 var listResult: List<Movie> = movieApiRepository.getMovies()
 
@@ -84,7 +93,8 @@ class MovieViewModel(
                 val movieStorageRepository = application.container.movieStorageRepository
                 MovieViewModel(
                     movieApiRepository = movieApiRepository,
-                    movieStorageRepository = movieStorageRepository
+                    movieStorageRepository = movieStorageRepository,
+                    authRepository = application.container.authRepository
                 )
             }
         }

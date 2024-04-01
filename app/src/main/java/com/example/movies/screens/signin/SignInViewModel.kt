@@ -33,9 +33,12 @@ class SignInViewModel(
     fun updateEmailState(newValue: String) {
         uiState.value = uiState.value.copy(email = newValue.trim())
     }
+
+
     //endregion
 
-    //region METHODS
+
+
     private fun validEmailAndPassword(): Boolean {
         if(uiState.value.email.isBlank()){
             uiState.value = uiState.value.copy(
@@ -67,7 +70,6 @@ class SignInViewModel(
                                 ?: "Something went wrong registering your account."
                         )
                     } else {
-
                         navigateOnSignIn()
                     }
                 }
@@ -102,6 +104,10 @@ class SignInViewModel(
                 errorMessage =  e.message ?: "Something went wrong logging into your account.")
         }
     }
+
+    fun logout() {
+        authRepository.logoutUser()
+    }
     //endregion
 
 
@@ -117,5 +123,6 @@ class SignInViewModel(
             }
         }
     }
-    //
+
+    //endregion
 }

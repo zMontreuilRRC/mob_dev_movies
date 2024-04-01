@@ -71,5 +71,21 @@ fun BottomNav(navController: NavController, modifier: Modifier = Modifier) {
             label = { Text(text = Destination.Watch.route.replaceFirstChar {it.uppercase() })}
         )
 
+        BottomNavigationItem(
+            selected = false,
+            onClick = {
+                      navController.navigate(Destination.SignIn.route) {
+                          popUpTo(Destination.SignIn.route)
+                      }
+                  },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.logout),
+                    contentDescription = "Log Out",
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+        )
+
     }
 }

@@ -33,6 +33,8 @@ fun SignInScreen(
 ) {
     val uiState by signInViewModel.uiState
 
+    signInViewModel.logout()
+
     Column (
         modifier = Modifier
             .padding(50.dp)

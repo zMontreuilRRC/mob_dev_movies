@@ -69,7 +69,14 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
         val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
         val signinViewModel: SignInViewModel = viewModel(factory = SignInViewModel.Factory)
 
-        signinViewModel.navigateOnSignIn = {navController.navigate(Destination.Movie.route)}
+        signinViewModel.navigateOnSignIn = {
+            signinViewModel.uiState.value = signinViewModel.uiState.value.copy(
+                email = "",
+                password = "",
+                errorMessage = ""
+            )
+            navController.navigate(Destination.Movie.route)
+        }
 
         NavHost(navController = navController, startDestination = Destination.SignIn.route) {
             composable(Destination.SignIn.route) {
