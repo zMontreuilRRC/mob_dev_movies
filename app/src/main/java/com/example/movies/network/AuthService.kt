@@ -23,9 +23,9 @@ class FirebaseAuthService {
             .addOnCompleteListener{
                 task ->
                 if(task.isSuccessful) {
-
+                    onResult(null)
                 } else {
-
+                    onResult(Exception(task.exception?.message))
                 }
             }
     }

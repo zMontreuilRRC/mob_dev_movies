@@ -34,7 +34,8 @@ fun SignInScreen(
     val uiState by signInViewModel.uiState
 
     Column (
-        modifier = Modifier.padding(50.dp)
+        modifier = Modifier
+            .padding(50.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -54,9 +55,10 @@ fun SignInScreen(
             textStyle = TextStyle(fontSize = 25.sp)
         )
         Button(
-            modifier = Modifier.size(width = 250.dp, height = 75.dp).
-                paddingFromBaseline(0.dp, 25.dp),
-            onClick = { /* TODO */ }
+            modifier = Modifier
+                .size(width = 250.dp, height = 75.dp)
+                .paddingFromBaseline(0.dp, 25.dp),
+            onClick = { signInViewModel.authenticateUser() }
         ) {
             Text(
                 "Log In",
@@ -64,7 +66,8 @@ fun SignInScreen(
             )
         }
         Button(
-            modifier = Modifier.size(width = 200.dp, height = 75.dp)
+            modifier = Modifier
+                .size(width = 200.dp, height = 75.dp)
                 .paddingFromBaseline(0.dp, 25.dp),
             onClick = { signInViewModel.registerUser() }
         ) {
@@ -79,6 +82,6 @@ fun SignInScreen(
             fontWeight = FontWeight.Bold,
             color = Color.Red,
             modifier = Modifier.background(color = Color.Gray)
-            )
+        )
     }
 }

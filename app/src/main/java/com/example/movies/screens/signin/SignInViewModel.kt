@@ -67,6 +67,7 @@ class SignInViewModel(
                                 ?: "Something went wrong registering your account."
                         )
                     } else {
+
                         navigateOnSignIn()
                     }
                 }
@@ -77,6 +78,30 @@ class SignInViewModel(
         }
     }
 
+    fun authenticateUser() {
+        try {
+            if(validEmailAndPassword()) {
+                authRepository.authenticate(
+                    uiState.value.email,
+                    uiState.value.password
+                ) {
+                    throwable ->
+                    if(throwable != null) {
+                        uiState.value = uiState.value.copy(
+                            errorMessage =  throwable.message
+                                ?: "Something went wrong registering your account."
+                        )
+                    } else {
+                        navigateOnSignIn()
+                    }
+
+                }
+            }
+        } catch(e: Exception) {
+            uiState.value = uiState.value.copy(
+                errorMessage =  e.message ?: "Something went wrong logging into your account.")
+        }
+    }
     //endregion
 
 
@@ -86,7 +111,9 @@ class SignInViewModel(
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MovieApplication)
                 val authRepository = application.container.authRepository
-                SignInViewModel(authRepository = authRepository)
+                SignInViewModel(
+                    authRepository = authRepository
+                )
             }
         }
     }

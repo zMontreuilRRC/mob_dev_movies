@@ -13,6 +13,7 @@ import com.example.movies.data.MovieDatabase
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.data.NetworkMovieApiRepository
 import com.example.movies.data.OfflineMovieStorageRepository
+import com.example.movies.model.MovieUser
 import com.example.movies.network.FirebaseAuthService
 
 interface AppContainer {
