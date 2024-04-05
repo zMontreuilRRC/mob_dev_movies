@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
 import com.example.movies.data.AuthRepository
 import com.example.movies.data.MovieApiRepository
+import com.example.movies.data.MovieLikeRepository
 import com.example.movies.model.Movie
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,8 @@ data class SearchUiState (
 
 class SearchViewModel(
     private val movieApiRepository: MovieApiRepository,
-    private val authRespository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val movieLikeRepository: MovieLikeRepository
 ): ViewModel() {
 
     private val _searchUiState = MutableStateFlow(SearchUiState())
@@ -59,7 +61,8 @@ class SearchViewModel(
                 val movieRepository = application.container.movieApiRepository
                 SearchViewModel(
                     movieApiRepository = movieRepository,
-                    authRespository = application.container.authRepository
+                    authRepository = application.container.authRepository,
+                    movieLikeRepository = application.container.movieLikeRepository
                 )
             }
         }

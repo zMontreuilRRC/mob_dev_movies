@@ -9,7 +9,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
 import com.example.movies.data.AuthRepository
+import com.example.movies.data.FirestoreMovieLikeRepository
 import com.example.movies.data.MovieApiRepository
+import com.example.movies.data.MovieLikeRepository
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.model.Movie
 import com.example.movies.model.MovieUser
@@ -27,7 +29,8 @@ data class MovieUiState (
 class MovieViewModel(
     private val movieApiRepository: MovieApiRepository,
     private val movieStorageRepository: MovieStorageRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val movieLikeRepository: MovieLikeRepository
 ): ViewModel() {
     // private variable
     private val _movieUiState = MutableStateFlow(MovieUiState())
@@ -94,7 +97,8 @@ class MovieViewModel(
                 MovieViewModel(
                     movieApiRepository = movieApiRepository,
                     movieStorageRepository = movieStorageRepository,
-                    authRepository = application.container.authRepository
+                    authRepository = application.container.authRepository,
+                    movieLikeRepository = application.container.movieLikeRepository
                 )
             }
         }

@@ -8,18 +8,22 @@ import retrofit2.Retrofit
 import android.content.Context
 import com.example.movies.data.AuthRepository
 import com.example.movies.data.FirebaseAuthRepository
+import com.example.movies.data.FirestoreMovieLikeRepository
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieDatabase
+import com.example.movies.data.MovieLikeRepository
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.data.NetworkMovieApiRepository
 import com.example.movies.data.OfflineMovieStorageRepository
 import com.example.movies.model.MovieUser
 import com.example.movies.network.FirebaseAuthService
+import com.example.movies.network.FirestoreService
 
 interface AppContainer {
     val movieApiRepository: MovieApiRepository
     val movieStorageRepository: MovieStorageRepository
     val authRepository: AuthRepository
+    val movieLikeRepository: MovieLikeRepository
 }
 
 class DefaultAppContainer (private val context: Context): AppContainer {
@@ -52,5 +56,9 @@ class DefaultAppContainer (private val context: Context): AppContainer {
 
     override val authRepository: FirebaseAuthRepository by lazy {
         FirebaseAuthRepository(FirebaseAuthService())
+    }
+
+    override val movieLikeRepository: MovieLikeRepository by lazy {
+        FirestoreMovieLikeRepository(FirestoreService())
     }
 }
