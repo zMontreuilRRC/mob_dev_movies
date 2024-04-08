@@ -13,15 +13,13 @@ import com.example.movies.data.AuthRepository
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieLikeRepository
 import com.example.movies.model.Movie
+import com.example.movies.screens.common.MovieVmUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class SearchUiState (
-    val movies: List<Movie> = mutableListOf()
-)
 
 class SearchViewModel(
     private val movieApiRepository: MovieApiRepository,
@@ -29,8 +27,8 @@ class SearchViewModel(
     private val movieLikeRepository: MovieLikeRepository
 ): ViewModel() {
 
-    private val _searchUiState = MutableStateFlow(SearchUiState())
-    val uiState: StateFlow<SearchUiState> = _searchUiState.asStateFlow()
+    private val _searchUiState = MutableStateFlow(MovieVmUiState())
+    val uiState: StateFlow<MovieVmUiState> = _searchUiState.asStateFlow()
 
     var searchValue by mutableStateOf("")
         private set

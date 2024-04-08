@@ -20,7 +20,13 @@ fun MovieScreen(
         LazyColumn{
             items(moviesUiState.value.movies) {
                 movie ->
-                MovieCard(movieItem = movie)
+                MovieCard(
+                    movieItem = movie,
+                    isLiked = moviesUiState.value.movieLikes.any() {
+                        it.movieId == movie.id.toString()
+                    },
+                    onFavouriteClick = { movieViewModel.postMovieLike(movie.id.toString()) }
+                )
             }
         }
     }

@@ -9,44 +9,61 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
 import com.example.movies.data.AuthRepository
-import com.example.movies.data.FirestoreMovieLikeRepository
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieLikeRepository
 import com.example.movies.data.MovieStorageRepository
 import com.example.movies.model.Movie
+import com.example.movies.model.MovieLike
 import com.example.movies.model.MovieUser
+import com.example.movies.screens.common.MovieVmUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.logging.Logger
 
 data class MovieUiState (
-    val movies: List<Movie> = mutableListOf()
+    val movies: List<Movie> = mutableListOf(),
+    val movieLikes: List<MovieLike> = mutableListOf()
 )
 
 class MovieViewModel(
-    private val movieApiRepository: MovieApiRepository,
-    private val movieStorageRepository: MovieStorageRepository,
-    private val authRepository: AuthRepository,
-    private val movieLikeRepository: MovieLikeRepository
+    private val _movieApiRepository: MovieApiRepository,
+    private val _movieStorageRepository: MovieStorageRepository,
+    private val _authRepository: AuthRepository,
+    private val _movieLikeRepository: MovieLikeRepository
 ): ViewModel() {
     // private variable
-    private val _movieUiState = MutableStateFlow(MovieUiState())
-    val uiState: StateFlow<MovieUiState> = _movieUiState.asStateFlow()
+    private val _movieUiState = MutableStateFlow(MovieVmUiState())
+    val uiState: StateFlow<MovieVmUiState> = _movieUiState.asStateFlow()
 
     init{
         getTrendingMovies()
     }
 
-    fun getUser() {
-        val user: MovieUser = authRepository.getCurrentUser()
-        Log.d("CURRENT USER", user.toString())
+    // TODO: Add movie like functionality to main screen, extract into common movieVM ancestor
+    private fun getMovieLikes(userId: String) {
+        try {
+            _movieLikeRepository.getLikedMovies(userId) {
+                val user:MovieUser = _authRepository.getCurrentUser()
+                _movieLikeRepository.getLikedMovies(userId) {
+                    result ->
+                    Log.i(user.id, result.toString())
+                    // TODO : populate list of likes for rendering in movies
+                    // Invoke on login
+                }
+            }
+        } catch(e: Exception) {
+            Log.w("GET:MOVIELIKES", e.toString())
+        }
+    }
+
+    fun postMovieLike(movieId: String) {
+        // TODO: post movie with user id and movie id
     }
 
     private suspend fun clearMovies() {
-        movieStorageRepository.clearAllMovies()
+        _movieStorageRepository.clearAllMovies()
     }
 
     // Note that this will not insert duplicate entries because
@@ -54,7 +71,7 @@ class MovieViewModel(
     private suspend fun saveMovies() {
         _movieUiState.value.movies.forEach {
             movie ->
-            movieStorageRepository.insertMovie(movie)
+            _movieStorageRepository.insertMovie(movie)
         }
     }
 
@@ -62,7 +79,7 @@ class MovieViewModel(
     private fun getTrendingMovies() {
         viewModelScope.launch {
             try {
-                var listResult: List<Movie> = movieApiRepository.getMovies()
+                val listResult: List<Movie> = _movieApiRepository.getMovies()
 
                 _movieUiState.update {
                         currentState ->
@@ -72,7 +89,7 @@ class MovieViewModel(
                 saveMovies()
             } catch (e: Exception) {
                 Log.w("OFFLINE", "Service offline")
-                var listResult = movieStorageRepository.getAllMovies()
+                val listResult = _movieStorageRepository.getAllMovies()
                 _movieUiState.update {
                         currentState ->
                     currentState.copy(movies = listResult)
@@ -95,10 +112,10 @@ class MovieViewModel(
                 val movieApiRepository = application.container.movieApiRepository
                 val movieStorageRepository = application.container.movieStorageRepository
                 MovieViewModel(
-                    movieApiRepository = movieApiRepository,
-                    movieStorageRepository = movieStorageRepository,
-                    authRepository = application.container.authRepository,
-                    movieLikeRepository = application.container.movieLikeRepository
+                    _movieApiRepository = movieApiRepository,
+                    _movieStorageRepository = movieStorageRepository,
+                    _authRepository = application.container.authRepository,
+                    _movieLikeRepository = application.container.movieLikeRepository
                 )
             }
         }

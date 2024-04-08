@@ -1,20 +1,22 @@
 package com.example.movies.data
 
 import android.util.Log
+import com.example.movies.model.MovieLike
 import com.example.movies.network.FirestoreService
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.toObject
 
 const val MOVIELIKE_TABLE = "movieLikes"
 interface MovieLikeRepository {
-    fun addMovieLike(userId: String, movieId: Int, onResult: (Throwable?) -> Unit)
-    fun getLikedMovies(userId: String, onResult: (Throwable?) -> Unit)
+    fun addMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
+    fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit)
 }
 
 class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreService): MovieLikeRepository {
-
-    override fun addMovieLike(userId: String, movieId: Int, onResult: (Throwable?) -> Unit) {
+    override fun addMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit) {
         val movieLike = hashMapOf(
-            userId to "userId",
-            movieId to "movieId"
+            "userId" to userId,
+            "movieId" to movieId
         )
 
         _firestoreService.db.collection(MOVIELIKE_TABLE)
@@ -31,15 +33,20 @@ class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreServi
             }
     }
 
-    override fun getLikedMovies(userId: String, onResult: (Throwable?) -> Unit) {
+    override fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit) {
         _firestoreService.db.collection(MOVIELIKE_TABLE)
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener {
                 documents ->
+
+                val movieLikes: MutableList<MovieLike> = mutableListOf()
                 for(document in documents) {
-                    Log.d("GET:MOVIELIKE", "${document.id} => ${document.data}")
+                    val likeObject:MovieLike = document.toObject<MovieLike>()
+                    movieLikes.add(likeObject)
                 }
+
+                onResult(movieLikes)
             }
             .addOnFailureListener {
                 e: Exception ->

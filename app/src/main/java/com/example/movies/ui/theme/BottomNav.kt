@@ -63,7 +63,7 @@ fun BottomNav(navController: NavController, modifier: Modifier = Modifier) {
             },
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.heart),
+                    painter = painterResource(id = R.drawable.heart_filled),
                     contentDescription = "Watch Screen",
                     modifier = Modifier.size(26.dp)
                 )

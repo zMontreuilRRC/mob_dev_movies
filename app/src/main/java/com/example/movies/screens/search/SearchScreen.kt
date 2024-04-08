@@ -19,7 +19,7 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel
 ) {
-    var searchUiState = searchViewModel.uiState.collectAsState()
+    val searchUiState = searchViewModel.uiState.collectAsState()
     Column() {
         Row(
             modifier =  Modifier.padding(8.dp)) {
@@ -36,7 +36,15 @@ fun SearchScreen(
         LazyColumn{
             items(searchUiState.value.movies) {
                     movie ->
-                MovieCard(movieItem = movie)
+                MovieCard(
+                    movieItem = movie,
+                    isLiked = searchUiState.value.movieLikes.any() {
+                        it.movieId == movie.id.toString()
+                    },
+                    onFavouriteClick = {
+                    // TODO: Add common functionality for movie like toggle between different VMs
+                    }
+                )
             }
         }
     }
