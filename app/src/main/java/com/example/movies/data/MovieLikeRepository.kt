@@ -7,7 +7,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.toObject
 
 const val MOVIELIKE_TABLE = "movieLikes"
-interface MovieLikeRepository {
+    interface MovieLikeRepository {
     fun addMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
     fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit)
 }

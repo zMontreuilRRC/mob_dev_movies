@@ -2,13 +2,15 @@ package com.example.movies.network
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 
 class FirebaseAuthService {
+    private var auth: FirebaseAuth = Firebase.auth
 
     fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        Firebase.auth.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{
                 task ->
                 if(task.isSuccessful) {
@@ -20,7 +22,7 @@ class FirebaseAuthService {
     }
 
     fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        Firebase.auth.signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener{
                 task ->
                 if(task.isSuccessful) {
@@ -32,10 +34,10 @@ class FirebaseAuthService {
     }
 
     fun logout() {
-        Firebase.auth.signOut()
+        auth.signOut()
     }
 
     fun getCurrentUser(): FirebaseUser? {
-        return Firebase.auth.currentUser
+        return auth.currentUser
     }
 }

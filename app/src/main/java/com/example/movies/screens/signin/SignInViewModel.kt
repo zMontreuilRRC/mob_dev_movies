@@ -1,7 +1,5 @@
 package com.example.movies.screens.signin
 
-import android.util.Log
-import android.util.Patterns
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
 import com.example.movies.data.AuthRepository
-import com.example.movies.screens.search.SearchViewModel
+import com.example.movies.model.MovieUser
 
 data class SignInUiState(
     val email: String = "",
@@ -18,7 +16,7 @@ data class SignInUiState(
 )
 
 class SignInViewModel(
-    private val authRepository: AuthRepository
+    private val _authRepository: AuthRepository
 ): ViewModel() {
     //region STATE
     var uiState = mutableStateOf(SignInUiState())
@@ -59,7 +57,7 @@ class SignInViewModel(
     fun registerUser() {
         try {
             if(validEmailAndPassword()) {
-                authRepository.createAccount(
+                _authRepository.createAccount(
                     uiState.value.email,
                     uiState.value.password.trim()
                 ) {
@@ -83,7 +81,7 @@ class SignInViewModel(
     fun authenticateUser() {
         try {
             if(validEmailAndPassword()) {
-                authRepository.authenticate(
+                _authRepository.authenticate(
                     uiState.value.email,
                     uiState.value.password
                 ) {
@@ -94,6 +92,7 @@ class SignInViewModel(
                                 ?: "Something went wrong registering your account."
                         )
                     } else {
+                        _authRepository.getCurrentUser()
                         navigateOnSignIn()
                     }
 
@@ -106,7 +105,7 @@ class SignInViewModel(
     }
 
     fun logout() {
-        authRepository.logoutUser()
+        _authRepository.logoutUser()
     }
     //endregion
 
@@ -118,7 +117,7 @@ class SignInViewModel(
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MovieApplication)
                 val authRepository = application.container.authRepository
                 SignInViewModel(
-                    authRepository = authRepository
+                    _authRepository = authRepository
                 )
             }
         }

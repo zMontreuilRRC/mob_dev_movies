@@ -9,6 +9,7 @@ interface AuthRepository {
     fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit)
     fun getCurrentUser(): MovieUser
     fun logoutUser()
+    val movieUser: MovieUser
 }
 
 class FirebaseAuthRepository (private val _authService: FirebaseAuthService): AuthRepository {
@@ -21,17 +22,22 @@ class FirebaseAuthRepository (private val _authService: FirebaseAuthService): Au
         _authService.authenticate(email, password, onResult)
     }
     override fun getCurrentUser(): MovieUser {
-        val firebaseUser = _authService.getCurrentUser()
-        if(firebaseUser == null) {
-            throw Exception("User credentials not found")
-        } else {
-            return MovieUser(
-                email = firebaseUser.email ?: "",
-                id = firebaseUser.uid,
-                isLoggedIn = firebaseUser.email != null && firebaseUser.uid != null
-            )
+        if(!movieUser.isLoggedIn) {
+            val firebaseUser = _authService.getCurrentUser()
+            if(firebaseUser == null) {
+                throw Exception("User credentials not found")
+            } else {
+                movieUser = movieUser.copy(
+                    email = firebaseUser ?.email ?: "",
+                    id = firebaseUser.uid,
+                    isLoggedIn = true
+                )
+            }
         }
+        return movieUser
     }
+
+    override var movieUser: MovieUser = MovieUser()
 
     override fun logoutUser() {
         _authService.logout()

@@ -45,6 +45,8 @@ class DefaultAppContainer (private val context: Context): AppContainer {
         retrofit.create(MovieApiService:: class.java)
     }
 
+
+
     override val movieApiRepository: MovieApiRepository by lazy {
         NetworkMovieApiRepository(retrofitService)
     }
