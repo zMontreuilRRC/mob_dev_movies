@@ -16,13 +16,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movies.ui.theme.BottomNav
-import com.example.movies.screens.movies.MovieScreen
-import com.example.movies.screens.movies.MovieViewModel
+import com.example.movies.screens.trending.TrendingScreen
+import com.example.movies.screens.common.MovieViewModel
 import com.example.movies.ui.theme.MoviesTheme
 import com.example.movies.screens.search.SearchScreen
 import com.example.movies.screens.search.SearchViewModel
 import com.example.movies.screens.signin.SignInScreen
 import com.example.movies.screens.signin.SignInViewModel
+import com.example.movies.screens.trending.TrendingViewModel
 import com.example.movies.screens.watch.WatchScreen
 
 sealed class Destination (val route: String) {
@@ -64,8 +65,7 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
         paddingValues ->
 
         // store search values in viewmodel to keep values across navigations
-
-        val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
+        val trendingViewModel: TrendingViewModel = viewModel(factory = TrendingViewModel.Factory)
         val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
         val signinViewModel: SignInViewModel = viewModel(factory = SignInViewModel.Factory)
 
@@ -84,7 +84,7 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
             }
             
             composable(Destination.Movie.route) {
-                MovieScreen(movieViewModel = movieViewModel)
+                TrendingScreen(movieViewModel = trendingViewModel)
             }
 
             composable(Destination.Search.route) {

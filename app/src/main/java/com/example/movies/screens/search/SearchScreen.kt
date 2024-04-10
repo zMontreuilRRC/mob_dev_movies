@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.movies.screens.common.MovieCardDisplay
 import com.example.movies.ui.theme.MovieCard
 
 @Composable
@@ -19,7 +20,6 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel
 ) {
-    val searchUiState = searchViewModel.uiState.collectAsState()
     Column() {
         Row(
             modifier =  Modifier.padding(8.dp)) {
@@ -33,20 +33,7 @@ fun SearchScreen(
                 Text("Search")
             }
         }
-        LazyColumn{
-            items(searchUiState.value.movies) {
-                    movie ->
-                MovieCard(
-                    movieItem = movie,
-                    isLiked = searchUiState.value.movieLikes.any() {
-                        it.movieId == movie.id.toString()
-                    },
-                    onFavouriteClick = {
-                    // TODO: Add common functionality for movie like toggle between different VMs
-                    }
-                )
-            }
-        }
+        MovieCardDisplay(movieViewModel = searchViewModel)
     }
 
 

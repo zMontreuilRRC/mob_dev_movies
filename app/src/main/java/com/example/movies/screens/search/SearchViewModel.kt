@@ -13,6 +13,7 @@ import com.example.movies.data.AuthRepository
 import com.example.movies.data.MovieApiRepository
 import com.example.movies.data.MovieLikeRepository
 import com.example.movies.model.Movie
+import com.example.movies.screens.common.MovieViewModel
 import com.example.movies.screens.common.MovieVmUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,11 +26,10 @@ class SearchViewModel(
     private val movieApiRepository: MovieApiRepository,
     private val authRepository: AuthRepository,
     private val movieLikeRepository: MovieLikeRepository
-): ViewModel() {
-
-    private val _searchUiState = MutableStateFlow(MovieVmUiState())
-    val uiState: StateFlow<MovieVmUiState> = _searchUiState.asStateFlow()
-
+): MovieViewModel(
+    _authRepository = authRepository,
+    _movieLikeRepository = movieLikeRepository,
+) {
     var searchValue by mutableStateOf("")
         private set
 
@@ -41,12 +41,11 @@ class SearchViewModel(
         val titleSearch = searchValue
         viewModelScope.launch {
             val dataResult = movieApiRepository.searchMovie(titleSearch)
-            _searchUiState.update {
+            movieUiState.update {
                 currentState ->
                 currentState.copy(movies = dataResult.results)
             }
         }
-
         searchValue = ""
     }
 
