@@ -84,10 +84,12 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
             }
             
             composable(Destination.Movie.route) {
+                trendingViewModel.getMovieLikes()
                 TrendingScreen(movieViewModel = trendingViewModel)
             }
 
             composable(Destination.Search.route) {
+                searchViewModel.getMovieLikes()
                 SearchScreen(searchViewModel = searchViewModel)
             }
 

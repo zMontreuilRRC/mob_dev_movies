@@ -1,6 +1,5 @@
 package com.example.movies.screens.common
 
-import androidx.lifecycle.ViewModel
 import com.example.movies.model.Movie
 import com.example.movies.model.MovieLike
 

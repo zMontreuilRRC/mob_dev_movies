@@ -7,9 +7,11 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.toObject
 
 const val MOVIELIKE_TABLE = "movieLikes"
-    interface MovieLikeRepository {
+interface MovieLikeRepository {
+    fun removeMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
     fun addMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
     fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit)
+    fun getMovieLikeId(userId: String, movieId: String, onResult: (String) -> Unit)
 }
 
 class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreService): MovieLikeRepository {
@@ -24,6 +26,7 @@ class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreServi
             .addOnSuccessListener {
                 documentReference ->
                 Log.d("POST:MOVIELIKE", "Movie Like added with Id: ${documentReference.id}" )
+                onResult(null)
             }
             .addOnFailureListener {
                 e: Exception ->
@@ -31,6 +34,37 @@ class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreServi
                     "Failed to add Movie ${movieId} and User ${userId}. ${e.message}"
                 )
             }
+    }
+
+    override fun getMovieLikeId(userId: String, movieId: String, onResult: (String) -> Unit) {
+        var docId: MutableList<String> = mutableListOf()
+
+        val movieLikeQuery = _firestoreService.db.collection(MOVIELIKE_TABLE)
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("movieId", movieId)
+
+        movieLikeQuery.get()
+            .addOnSuccessListener {
+                documents ->
+                for(document in documents) {
+                    Log.d("MOVIELIKES:GET", document.id)
+                    onResult(document.id)
+                }
+            }
+            .addOnFailureListener {
+                Log.w("MOVIELIKES:GET", "Failed to get document")
+            }
+    }
+    override fun removeMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit) {
+        getMovieLikeId(userId, movieId) {
+            docId ->
+            _firestoreService.db.collection(MOVIELIKE_TABLE)
+                .document(docId)
+                .delete()
+                .addOnSuccessListener {
+                    onResult(null)
+                }
+        }
     }
 
     override fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit) {

@@ -27,7 +27,7 @@ fun MovieCardDisplay (
                 isLiked = movieUiState.value.movieLikes.any() {
                     it.movieId == movie.id.toString()
                 },
-                onFavouriteClick = { movieViewModel.postMovieLike(movie.id.toString()) }
+                onFavouriteClick = { movieViewModel.postMovieLikeToggle(movie.id.toString()) }
             )
         }
     }
