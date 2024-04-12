@@ -2,11 +2,13 @@ package com.example.movies.data
 
 import com.example.movies.model.Movie
 import com.example.movies.model.MovieData
+import com.example.movies.model.MovieLike
 import com.example.movies.network.MovieApiService
 
 interface MovieApiRepository {
     suspend fun getMovies(): List<Movie>
     suspend fun searchMovie(searchTitle: String): MovieData
+    fun getLikedMovies(userId: String, likes: List<MovieLike>, onResult: (List<Movie>) -> Unit)
 }
 
 class NetworkMovieApiRepository(
@@ -19,6 +21,10 @@ class NetworkMovieApiRepository(
 
     override suspend fun searchMovie(searchTitle: String): MovieData {
         return movieApiService.searchMovies(searchTitle = searchTitle)
+    }
+
+    override fun getLikedMovies(userId: String, movieLikes: List<MovieLike>, onResult: (List<Movie>) -> Unit) {
+        TODO("Not yet implemented")
     }
 }
 
@@ -38,6 +44,10 @@ class FakeMovieApiRepository(): MovieApiRepository {
         }
 
         return newData
+    }
+
+    override fun getLikedMovies(userId: String, likes: List<MovieLike>, onResult: (List<Movie>) -> Unit) {
+        TODO("Not yet implemented")
     }
 
 }

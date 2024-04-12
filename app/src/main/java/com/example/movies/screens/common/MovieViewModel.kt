@@ -29,7 +29,7 @@ open class MovieViewModel(
     fun getMovieLikes() {
         try {
                 val user:MovieUser = _authRepository.getCurrentUser()
-                _movieLikeRepository.getLikedMovies(user.id) {
+                _movieLikeRepository.getMovieLikes(user.id) {
                     newMovieLikes ->
                     movieUiState.update {
                         currentState ->

@@ -1,16 +1,16 @@
 package com.example.movies.data
 
 import android.util.Log
+import com.example.movies.model.Movie
 import com.example.movies.model.MovieLike
 import com.example.movies.network.FirestoreService
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.toObject
 
 const val MOVIELIKE_TABLE = "movieLikes"
 interface MovieLikeRepository {
     fun removeMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
     fun addMovieLike(userId: String, movieId: String, onResult: (Throwable?) -> Unit)
-    fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit)
+    fun getMovieLikes(userId: String, onResult: (List<MovieLike>) -> Unit)
     fun getMovieLikeId(userId: String, movieId: String, onResult: (String) -> Unit)
 }
 
@@ -67,7 +67,7 @@ class FirestoreMovieLikeRepository(private val _firestoreService: FirestoreServi
         }
     }
 
-    override fun getLikedMovies(userId: String, onResult: (List<MovieLike>) -> Unit) {
+    override fun getMovieLikes(userId: String, onResult: (List<MovieLike>) -> Unit) {
         _firestoreService.db.collection(MOVIELIKE_TABLE)
             .whereEqualTo("userId", userId)
             .get()
