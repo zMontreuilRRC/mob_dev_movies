@@ -25,6 +25,7 @@ import com.example.movies.screens.signin.SignInScreen
 import com.example.movies.screens.signin.SignInViewModel
 import com.example.movies.screens.trending.TrendingViewModel
 import com.example.movies.screens.watch.WatchScreen
+import com.example.movies.screens.watch.WatchViewModel
 
 sealed class Destination (val route: String) {
     object Movie: Destination("movies")
@@ -68,6 +69,7 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
         val trendingViewModel: TrendingViewModel = viewModel(factory = TrendingViewModel.Factory)
         val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
         val signinViewModel: SignInViewModel = viewModel(factory = SignInViewModel.Factory)
+        val watchViewModel: WatchViewModel = viewModel(factory = WatchViewModel.Factory)
 
         signinViewModel.navigateOnSignIn = {
             signinViewModel.uiState.value = signinViewModel.uiState.value.copy(
@@ -94,7 +96,9 @@ fun MovieScaffold(navController: NavHostController, modifier: Modifier = Modifie
             }
 
             composable(Destination.Watch.route) {
-                WatchScreen()
+                watchViewModel.getMovieLikes()
+                watchViewModel.getLikedMovies()
+                WatchScreen(watchViewModel = watchViewModel)
             }
         }
     }

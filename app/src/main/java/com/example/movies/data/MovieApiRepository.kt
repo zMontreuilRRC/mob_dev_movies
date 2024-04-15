@@ -1,5 +1,6 @@
 package com.example.movies.data
 
+import android.util.Log
 import com.example.movies.model.Movie
 import com.example.movies.model.MovieData
 import com.example.movies.model.MovieLike
@@ -8,7 +9,7 @@ import com.example.movies.network.MovieApiService
 interface MovieApiRepository {
     suspend fun getMovies(): List<Movie>
     suspend fun searchMovie(searchTitle: String): MovieData
-    fun getLikedMovies(userId: String, likes: List<MovieLike>, onResult: (List<Movie>) -> Unit)
+    suspend fun getLikedMovies(userId: String, movieLikes: List<MovieLike>, onResult: (List<Movie>) -> Unit)
 }
 
 class NetworkMovieApiRepository(
@@ -23,8 +24,16 @@ class NetworkMovieApiRepository(
         return movieApiService.searchMovies(searchTitle = searchTitle)
     }
 
-    override fun getLikedMovies(userId: String, movieLikes: List<MovieLike>, onResult: (List<Movie>) -> Unit) {
-        TODO("Not yet implemented")
+    override suspend fun getLikedMovies(userId: String, movieLikes: List<MovieLike>,
+                                        onResult: (List<Movie>) -> Unit) {
+        val movies: MutableList<Movie> = mutableListOf()
+
+        for(l in movieLikes) {
+            val foundMovie = movieApiService.getMovieById(movieId = l.movieId.toString())
+            movies.add(foundMovie)
+        }
+
+        onResult(movies)
     }
 }
 
@@ -46,7 +55,7 @@ class FakeMovieApiRepository(): MovieApiRepository {
         return newData
     }
 
-    override fun getLikedMovies(userId: String, likes: List<MovieLike>, onResult: (List<Movie>) -> Unit) {
+    override suspend fun getLikedMovies(userId: String, likes: List<MovieLike>, onResult: (List<Movie>) -> Unit) {
         TODO("Not yet implemented")
     }
 

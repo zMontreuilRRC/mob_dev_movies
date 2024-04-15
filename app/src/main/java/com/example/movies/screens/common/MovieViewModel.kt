@@ -43,7 +43,7 @@ open class MovieViewModel(
         }
     }
 
-    fun postMovieLikeToggle(movieId: String) {
+    open fun postMovieLikeToggle(movieId: String) {
         try {
             val user: MovieUser = _authRepository.getCurrentUser()
 

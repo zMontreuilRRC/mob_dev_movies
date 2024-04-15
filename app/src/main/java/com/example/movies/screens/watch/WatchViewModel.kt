@@ -2,6 +2,7 @@ package com.example.movies.screens.watch
 
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movies.MovieApplication
@@ -12,21 +13,27 @@ import com.example.movies.model.Movie
 import com.example.movies.model.MovieUser
 import com.example.movies.screens.common.MovieViewModel
 import com.example.movies.screens.trending.TrendingViewModel
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class WatchViewModel(
     private val _authRepository: AuthRepository,
     private val _movieLikeRepository: MovieLikeRepository,
-    private val _movieApiRepository: MovieApiRepository
+    private val _movieApiRepository: MovieApiRepository,
     ) : MovieViewModel(_authRepository, _movieLikeRepository)
 {
     fun getLikedMovies() {
         val user: MovieUser = _authRepository.getCurrentUser()
         _movieLikeRepository.getMovieLikes(user.id) {
-            likes ->
-            _movieApiRepository.getLikedMovies(user.id, likes) {
-                result ->
-                Log.d("GET:LIKEDMOVIES", result.toString())
-                /* TODO: Add liked movies to state */
+                likes ->
+            viewModelScope.launch {
+                _movieApiRepository.getLikedMovies(user.id, likes) {
+                    result ->
+                    movieUiState.update {
+                        currentState ->
+                        currentState.copy(movies = result)
+                    }
+                }
             }
         }
     }
