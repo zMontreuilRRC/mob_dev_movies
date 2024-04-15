@@ -68,7 +68,7 @@ class SignInViewModel(
                                 ?: "Something went wrong registering your account."
                         )
                     } else {
-                        navigateOnSignIn()
+                        authenticateUser()
                     }
                 }
             }
